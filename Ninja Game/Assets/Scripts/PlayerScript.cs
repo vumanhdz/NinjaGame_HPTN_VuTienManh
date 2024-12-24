@@ -17,7 +17,6 @@ public class PlayerScript : MonoBehaviour
     private bool isMove;
     private bool isGround;
     private bool canJump;
-    private bool canFlip;
     private bool isTouchingWall;
     private bool isWallSliding;
 
@@ -50,8 +49,6 @@ public class PlayerScript : MonoBehaviour
         UpdateAnimation();
         CheckJump();
         checkwallsliding();
-        EnableFlip();
-        DisableFlip();
     }
 
     private void FixedUpdate()
@@ -150,17 +147,6 @@ public class PlayerScript : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
             }
         }   
-    }
-
-
-    private void DisableFlip()
-    {
-        canFlip = false;
-    }
-
-    private void EnableFlip()
-    {
-        canFlip = true;
     }
 
     private void Flip()

@@ -54,8 +54,6 @@ public class PlayerCombatController : MonoBehaviour
             // Kích hoạt animation
 /*            anim.SetBool("is attacking", true);
 */            anim.SetTrigger("is attacking");
-            /*            anim.SetBool("first attack", isFirstAttack);
-            */
             // Gọi hàm kết thúc tấn công sau thời gian ngắn (giả sử thời gian animation là 0.5s)
             Invoke(nameof(FinishAttack), 0.45f);
         }

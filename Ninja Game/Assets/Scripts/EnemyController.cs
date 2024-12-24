@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
     private State currentState;
 
     [SerializeField]
-    private float groundCheckDis, wallCheckDis, KnockD;
+    private float groundCheckDis, wallCheckDis, KnockD, TouchDameTime, TouchDame, TouchDameCooldow, TouchDameW, TouchDameH;
 
 
     [SerializeField]
@@ -29,9 +29,9 @@ public class EnemyController : MonoBehaviour
 
 
     [SerializeField]
-    private LayerMask whatGround;
+    private LayerMask whatGround, whatPlayer;
     [SerializeField]
-    private Vector2 KnockSpeed;
+    private Vector2 KnockSpeed,TouchDameTopL, TouchDameTopR;
     private bool ground, wall;
 
     private float KnockStarTime;
@@ -110,7 +110,7 @@ public class EnemyController : MonoBehaviour
     private void EnterKnockState()
     {
         KnockStarTime = Time.time;
-        move.Set(KnockSpeed.x*10, KnockSpeed.y);
+        move.Set((speed > 0) ? -10 : (speed < 0 ? 10 : KnockSpeed.x), 5);
         rb.velocity = move;
         anim.SetTrigger("Knock");
     }
