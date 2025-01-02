@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using Unity.VisualScripting;
 
 public class TalkScripts : MonoBehaviour
 {
@@ -11,17 +11,21 @@ public class TalkScripts : MonoBehaviour
     public string[] DiaLog;
     private int index;
 
-    public GameObject Btn;
+    public Transform PlayerCheck;
+    public float PlayerCheckDis;
+    public LayerMask whatPlayer;
+
     public float Wspeed;
     public bool Playercome;
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && Playercome)
+        CheckPlayer();
+        if (Input.GetKeyDown(KeyCode.E) && Playercome)
         {
             if(DiaLogPanel.activeInHierarchy)
             {
-                zeroText();
+                NextLine();
             }
             else
             {
@@ -29,10 +33,15 @@ public class TalkScripts : MonoBehaviour
                 StartCoroutine(Typing());
             }
         }
-        if(DiaLogText.text == DiaLog[index])
+        if (!Playercome)
         {
-            Btn.SetActive(true);
+            zeroText();
         }
+    }
+
+    private void CheckPlayer()
+    {
+        Playercome = Physics2D.Raycast(PlayerCheck.position, transform.right, PlayerCheckDis, whatPlayer);
     }
 
     public void zeroText()
@@ -53,8 +62,6 @@ public class TalkScripts : MonoBehaviour
 
     public void NextLine()
     {
-        Btn.SetActive(false);
-
         if (index < DiaLog.Length - 1)
         {
             index++;
@@ -66,21 +73,8 @@ public class TalkScripts : MonoBehaviour
             zeroText() ;
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDrawGizmos()
     {
-        if (collision.CompareTag("Inovar"))
-        {
-            Playercome = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Inovar"))
-        {
-            Playercome = false;
-            zeroText();
-        }
+        Gizmos.DrawLine(PlayerCheck.position, new Vector2(PlayerCheck.position.x + PlayerCheckDis, PlayerCheck.position.y));
     }
 }
