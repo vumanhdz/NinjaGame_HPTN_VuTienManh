@@ -10,13 +10,14 @@ public class EnemyController : MonoBehaviour
     private bool isRight = true;
     private Vector2 move;
     private float Dame;
+    public GameObject coin;
 
     public float maxHealth;
 
-    public float speed = 1.5f;
+    public float speed;
 
 
-    public GameObject Enemy;
+    private GameObject Player;
 
     private State currentState;
 
@@ -36,10 +37,10 @@ public class EnemyController : MonoBehaviour
 
     private float KnockStarTime;
 
-    // Start is called before the first frame update
 
     void Start()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 /*        Enemy = transform.Find("Slime").gameObject;*/
@@ -88,19 +89,59 @@ public class EnemyController : MonoBehaviour
     }
     private void UpdateWalkState()
     {
+        // Kiểm tra xem enemy có đang trên mặt đất và không va chạm với tường
         ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDis, whatGround);
-        wall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDis,whatGround);
-        if(!ground || wall)
+        wall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDis, whatGround);
+
+        if (!ground || wall)
         {
             Flip();
         }
         else
         {
-            move.Set(speed, rb.velocity.y);
-            rb.velocity = move;
-        }
+            // Kiểm tra xem player có tồn tại hay không
+            if (Player != null)
+            {
+                // Lấy vị trí của player
+                Vector2 targetPosition = Player.transform.position;
+                // Kiểm tra nếu player ở trên cao hơn enemy
+                if (targetPosition.y > rb.position.y)
+                {
+                    move.Set(speed, rb.velocity.y);
+                    rb.velocity = move;
+                }
+                else
+                {
+                    float direction = targetPosition.x - rb.position.x;
 
+                    // Kiểm tra hướng để quay mặt về phía player
+                    if ((direction > 0 && !isRight) || (direction < 0 && isRight))
+                    {
+                        Flip(); // Quay mặt về phía player
+                    }
+                    move.Set(speed, rb.velocity.y);
+                    rb.velocity = move;
+                    if (!ground || wall)
+                    {
+                        Flip(); // Đảo hướng nếu gặp tường hoặc rơi ra khỏi nền
+                    }
+                    /* // Di chuyển enemy về phía player chỉ theo trục x
+                     Vector2 newPosition = new Vector2(Mathf.MoveTowards(rb.position.x, targetPosition.x, speed * Time.deltaTime),rb.position.y);
+
+                     // Cập nhật vị trí Rigidbody2D
+ *//*                    rb.MovePosition(newPosition);*//*
+ */
+                }
+            }
+            else
+            {
+                // Nếu không có player, tiếp tục di chuyển theo hướng hiện tại
+                move.Set(speed, rb.velocity.y);
+                rb.velocity = move;
+            }
+        }
     }
+
     private void ExitWalkState()
     {
 
@@ -135,6 +176,7 @@ public class EnemyController : MonoBehaviour
     //---------Dead State-------------------------
     private void EnterDeadState()
     {
+        Instantiate(coin, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     private void UpdateDeadState()

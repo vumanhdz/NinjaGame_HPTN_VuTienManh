@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Inovar
+  - Enemy
+  - Coin
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - UI
   - Ground
   - Enemy
-  - 
+  - Coin
   - 
   - 
   - 

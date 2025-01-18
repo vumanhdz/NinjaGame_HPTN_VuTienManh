@@ -1,13 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UiController : MonoBehaviour
 {
-    public GameObject UiManager;
-    // Start is called before the first frame update
-    
+    public GameObject UiPause;
+    public GameObject UiAbout;
+    public GameObject UiHscore;
+
     public void Playgame()
     {
         SceneManager.LoadScene("MainScenes");
@@ -15,17 +16,38 @@ public class UiController : MonoBehaviour
     }
     public void Pausegame()
     {
-        UiManager.SetActive(true);
+        UiPause.SetActive(true);
         Time.timeScale = 0f;
     }
     public void Resumegame()
     {
-        UiManager.SetActive(false);
+        UiPause.SetActive(false);
         Time.timeScale = 1.0f;
     }
     public void Home()
     {
         SceneManager.LoadScene("UI");
         Time.timeScale = 1.0f;
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1.0f;
+    }
+    public void Hscore()
+    {
+        UiHscore.SetActive(true);
+    }
+    public void About()
+    {
+        UiAbout.SetActive(true);
+    }
+    public void Xab()
+    {
+        UiAbout.SetActive(false);
+    }
+    public void Xhs()
+    {
+        UiHscore.SetActive(false);
     }
 }
